@@ -8,14 +8,47 @@
 import SwiftUI
 
 struct ContentView: View {
+  
+  @AppStorage("lightsOn") private var lightsOn: Bool = false
+  
+  private var backgroundColor: Color {
+    lightsOn ? .white : .black
+  }
+  
+  private var foregroundColor: Color {
+    lightsOn ? .black : .white
+  }
+  
+  private var imageName: String {
+    lightsOn ? "sun.max.fill" : "moon.fill"
+  }
+  
+  private var imageColor: Color {
+    lightsOn ? .yellow : .blue
+  }
+  
+  private var text: String {
+    lightsOn ? "¡Apaga la luz!" : "¡Prende la luz!"
+  }
+  
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+      ZStack{
+        backgroundColor.ignoresSafeArea(.all)
+       
+        VStack(alignment: .center){
+          Spacer()
+          Image(systemName: imageName)
+            .font(.system(size: 80))
+            .foregroundColor(imageColor)
+          Spacer()
+          Text(text)
+            .font(.largeTitle)
+            .bold()
+          Toggle("", isOn: $lightsOn)
+            .labelsHidden()
+        }.foregroundColor(foregroundColor)
+        
+      }
     }
 }
 
