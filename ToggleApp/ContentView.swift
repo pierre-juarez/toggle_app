@@ -31,6 +31,8 @@ struct ContentView: View {
     lightsOn ? "¡Apaga la luz!" : "¡Prende la luz!"
   }
   
+  @State private var rotation: Double = 0
+  
     var body: some View {
       ZStack{
         backgroundColor.ignoresSafeArea(.all)
@@ -40,13 +42,24 @@ struct ContentView: View {
           Image(systemName: imageName)
             .font(.system(size: 80))
             .foregroundColor(imageColor)
+            .padding()
+            .rotationEffect(.degrees(rotation))
+            .animation(Animation.easeInOut(duration: 1), value: rotation)
           Spacer()
           Text(text)
             .font(.largeTitle)
             .bold()
-          Toggle("", isOn: $lightsOn)
+            .animation(.none)
+          Toggle("", isOn: $lightsOn.animation())
             .labelsHidden()
         }.foregroundColor(foregroundColor)
+          .onChange(of: lightsOn) { value in
+            if value {
+              rotation += 360
+            }else{
+              rotation -= 360
+            }
+          }
         
       }
     }
